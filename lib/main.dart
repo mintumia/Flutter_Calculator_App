@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:calculator_app/screens/home/home_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+//import 'package:riverpod/riverpod.dart';
 
 
-void main() => runApp(CalculatorApp());
+void main() => runApp(ProviderScope(child: CalculatorApp()));
 
-class CalculatorApp extends StatefulWidget {
+
+class CalculatorApp extends ConsumerWidget {
   const CalculatorApp({super.key});
 
   @override
-  State<CalculatorApp> createState() => _CalculatorAppState();
-}
-
-class _CalculatorAppState extends State<CalculatorApp> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "hllll",
+      title: "Calculor App",
       home: SafeArea(child: HomeScreen()),
     );
   }

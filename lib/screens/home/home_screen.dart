@@ -1,29 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
-class HomeScreen extends StatefulWidget {
+final counterProvider = StateProvider((Ref ref){
+
+  return 0 ;
+
+});
+
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
 
-class _HomeScreenState extends State<HomeScreen> {
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final counter = ref.watch(counterProvider);
+
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.green, title: Text("Tittle ok")),
       body: Column(
         children: [
-          FloatingActionButton(onPressed: () {}, child: Icon(Icons.add)),
           Container(
             padding: EdgeInsets.all(20),
-
-            margin: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.lightGreenAccent,
-            ),
-            child: Text("This is Body"),
+            color: Colors.purple,
+            child: Text(counter.toString()),
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            color: Colors.yellow,
+            child: Text("First Container"),
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            color: Colors.blue,
+            child: Text("First Container"),
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            color: Colors.green,
+            child: ElevatedButton(onPressed: (){
+              ref.read(counterProvider.notifier).state +=2;
+            }, child: Text("Click Me")),
           ),
         ],
       ),

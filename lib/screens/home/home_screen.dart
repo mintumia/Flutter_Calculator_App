@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
-final counterProvider = StateProvider((Ref ref){
-
-  return 0 ;
-
-});
+import '../../counter/presentation/counter_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -16,6 +12,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final counter = ref.watch(counterProvider);
+    final counterController = ref.read(counterProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.green, title: Text("Tittle ok")),
@@ -40,8 +37,22 @@ class HomeScreen extends ConsumerWidget {
             padding: EdgeInsets.all(20),
             color: Colors.green,
             child: ElevatedButton(onPressed: (){
-              ref.read(counterProvider.notifier).state +=2;
-            }, child: Text("Click Me")),
+              counterController.increment();
+            }, child: Text("Increment")),
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            color: Colors.purple,
+            child: ElevatedButton(onPressed: (){
+              counterController.decrement();
+            }, child: Text("Decrement")),
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            color: Colors.indigo,
+            child: ElevatedButton(onPressed: (){
+              counterController.reset();
+            }, child: Text("Reset")),
           ),
         ],
       ),

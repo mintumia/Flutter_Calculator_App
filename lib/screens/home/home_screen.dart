@@ -10,17 +10,25 @@ final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
   return UserNotifier();
 });
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      ConsumerStatefulHomeScreen();
+}
+
+class ConsumerStatefulHomeScreen extends ConsumerState<HomeScreen> {
+  final _controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
     final counter = ref.watch(counterProvider);
     final counterController = ref.read(counterProvider.notifier);
 
     final user = ref.watch(userProvider);
     final userController = ref.read(userProvider.notifier);
-    final  nameController = TextEditingController();
+    final nameController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.green, title: Text("Tittle ok")),
@@ -59,16 +67,6 @@ class HomeScreen extends ConsumerWidget {
               onPressed: () {
                 counterController.reset();
               },
-              child: Text(nameController.value.toString()),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(20),
-            color: Colors.indigo,
-            child: ElevatedButton(
-              onPressed: () {
-                counterController.reset();
-              },
               child: Text(user.age.toString()),
             ),
           ),
@@ -86,12 +84,22 @@ class HomeScreen extends ConsumerWidget {
             padding: EdgeInsets.all(20),
             color: Colors.indigo,
             child: TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter a search term',
-              ),
+              controller: _controller,
+              decoration: InputDecoration(border: OutlineInputBorder()),
+              onChanged: (value){
+                userController.changeName(value);
+              },
+            ),
+          ),
 
-              controller: nameController,
+          Container(
+            padding: EdgeInsets.all(20),
+            color: Colors.indigo,
+            child: ElevatedButton(
+              onPressed: () {
+                counterController.reset();
+              },
+              child: Text(userController.getName),
             ),
           ),
         ],

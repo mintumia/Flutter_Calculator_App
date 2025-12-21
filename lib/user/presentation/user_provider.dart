@@ -12,4 +12,8 @@ class UserNotifier extends StateNotifier<User> {
   void changeName(String _name){
     state.name = _name;
   }
+
+  get getName {
+    return  state.name;
+  }
 }

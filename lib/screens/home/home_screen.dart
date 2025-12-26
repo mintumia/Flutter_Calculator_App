@@ -49,7 +49,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final userName = ref.watch(userProvider.select((u) => u.name));
 
     useEffect(() {
-      if(_numberNotifier.value <50){
+      if(_numberNotifier.value <10){
         final _timer = Timer.periodic(Duration(seconds: 1), (time) {
           _numberNotifier.value ++;
          // debugPrint(_numberNotifier.value.toString());
@@ -61,14 +61,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     useEffect((){
 
-      ref.read(userProvider.notifier).changeName(mText.text);
+      ref.watch(userProvider.notifier).changeName(mText.text);
 
       return null;
 
-    },[mText.value]);
+    },[mText.text]);
 
 
-    final userController = ref.read(userProvider.notifier);
+    final userController = ref.watch(userProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -98,15 +98,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   labelText: "Enter name",
                 ),
                 onChanged: (value) {
-                  ref.read(userProvider.notifier).changeName(value);
+                  ref.watch(userProvider.notifier).changeName(value);
                 },
               ),
             ),
 
             _button(_numberNotifier.value.toString(), Colors.teal, () {}),
             //Text(ref.read(userProvider.notifier).getName.toString(),style: TextStyle(color: Colors.red),),
-            _button(ref.read(userProvider.notifier).getName.toString(), Colors.indigo, () {}),
-            _mintuButton(ref.read(userProvider.notifier).getName.toString(), Colors.indigo)
+            _button(ref.watch(userProvider.notifier).getName.toString(), Colors.indigo, () {}),
+            _mintuButton(ref.watch(userProvider.notifier).getName.toString(), Colors.indigo)
           ],
         ),
       ),

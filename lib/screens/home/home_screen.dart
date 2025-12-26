@@ -41,6 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final counter = ref.watch(counterProvider);
     final counterController = ref.read(counterProvider.notifier);
     final _numberNotifier = useState(0);
+    final mText = useTextEditingController();
 
 
     // rebuilds ONLY when name changes
@@ -51,12 +52,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if(_numberNotifier.value <50){
         final _timer = Timer.periodic(Duration(seconds: 1), (time) {
           _numberNotifier.value ++;
-          debugPrint(_numberNotifier.value.toString());
+         // debugPrint(_numberNotifier.value.toString());
           return time.cancel();
         });
       }
       return null;
     }, [_numberNotifier.value]);
+
+    useEffect((){
+
+      ref.read(userProvider.notifier).changeName(mText.text);
+
+      return null;
+
+    },[mText.value]);
+
 
     final userController = ref.read(userProvider.notifier);
 
@@ -82,7 +92,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: TextFormField(
-                controller: _controller,
+                controller: mText,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "Enter name",
@@ -94,6 +104,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
 
             _button(_numberNotifier.value.toString(), Colors.teal, () {}),
+            //Text(ref.read(userProvider.notifier).getName.toString(),style: TextStyle(color: Colors.red),),
+            _button(ref.read(userProvider.notifier).getName.toString(), Colors.indigo, () {}),
+            _mintuButton(ref.read(userProvider.notifier).getName.toString(), Colors.indigo)
           ],
         ),
       ),
@@ -113,6 +126,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       padding: const EdgeInsets.all(20),
       color: color,
       child: ElevatedButton(onPressed: onPressed, child: Text(text)),
+    );
+  }
+
+  Widget _mintuButton(String info, Color color){
+    return Container(
+      color: color,
+      padding: EdgeInsets.all(10),
+      child: Text(info),
     );
   }
 }

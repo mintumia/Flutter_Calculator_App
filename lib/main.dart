@@ -8,6 +8,8 @@ void main() => runApp(ProviderScope(child: CalculatorApp()));
 class CalculatorApp extends ConsumerStatefulWidget {
   const CalculatorApp({super.key});
 
+
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       ConsumerStatefulCalculator();

@@ -1,3 +1,123 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../counter/presentation/counter_provider.dart';
+import '../../user/data/user_service.dart';
+import '../../user/presentation/user_provider.dart';
+
+final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
+  return UserNotifier();
+});
+
+class HomeScreen extends StatefulHookConsumerWidget {
+  const HomeScreen({super.key});
+
+  @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final counter = ref.watch(counterProvider);
+    final counterController = ref.read(counterProvider.notifier);
+    final _numberNotifier = useState(0);
+
+
+    // rebuilds ONLY when name changes
+    //final userName = ref.watch(userProvider.select((user) => user.name));
+    final userName = ref.watch(userProvider.select((u) => u.name));
+
+    useEffect(() {
+      if(_numberNotifier.value <50){
+        final _timer = Timer.periodic(Duration(seconds: 1), (time) {
+          _numberNotifier.value ++;
+          debugPrint(_numberNotifier.value.toString());
+          return time.cancel();
+        });
+      }
+      return null;
+    }, [_numberNotifier.value]);
+
+    final userController = ref.read(userProvider.notifier);
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: const Text("Title OK"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _box(counter.toString(), Colors.purple),
+
+            _box("First Container", Colors.yellow),
+            _box("Second Container", Colors.blue),
+
+            _button("Increment", Colors.green, counterController.increment),
+
+            _button("Reset Counter", Colors.indigo, counterController.reset),
+
+            _button("Increase Age", Colors.indigo, userController.increaseAge),
+
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: TextFormField(
+                controller: _controller,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "Enter name",
+                ),
+                onChanged: (value) {
+                  ref.read(userProvider.notifier).changeName(value);
+                },
+              ),
+            ),
+
+            _button(_numberNotifier.value.toString(), Colors.teal, () {}),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _box(String text, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      color: color,
+      child: Text(text),
+    );
+  }
+
+  Widget _button(String text, Color color, VoidCallback onPressed) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      color: color,
+      child: ElevatedButton(onPressed: onPressed, child: Text(text)),
+    );
+  }
+}
+
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
@@ -22,11 +142,21 @@ class ConsumerStatefulHomeScreen extends ConsumerState<HomeScreen> {
   final _controller = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller.addListener((){
+      ref.read(userProvider.notifier).changeName(_controller.text);
+    });
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     final counter = ref.watch(counterProvider);
     final counterController = ref.read(counterProvider.notifier);
 
-    final user = ref.watch(userProvider);
+    final user = ref.watch(userProvider).name;
     final userController = ref.read(userProvider.notifier);
     final nameController = TextEditingController();
 
@@ -67,7 +197,7 @@ class ConsumerStatefulHomeScreen extends ConsumerState<HomeScreen> {
               onPressed: () {
                 counterController.reset();
               },
-              child: Text(user.age.toString()),
+              child: Text("Reset"),
             ),
           ),
           Container(
@@ -83,11 +213,11 @@ class ConsumerStatefulHomeScreen extends ConsumerState<HomeScreen> {
           Container(
             padding: EdgeInsets.all(20),
             color: Colors.indigo,
-            child: TextField(
+            child: TextFormField(
               controller: _controller,
               decoration: InputDecoration(border: OutlineInputBorder()),
               onChanged: (value){
-                userController.changeName(value);
+                ref.read(userProvider.notifier).changeName(value);
               },
             ),
           ),
@@ -99,7 +229,7 @@ class ConsumerStatefulHomeScreen extends ConsumerState<HomeScreen> {
               onPressed: () {
                 counterController.reset();
               },
-              child: Text(userController.getName),
+              child: Text(user.toString()),
             ),
           ),
         ],
@@ -107,3 +237,4 @@ class ConsumerStatefulHomeScreen extends ConsumerState<HomeScreen> {
     );
   }
 }
+*/

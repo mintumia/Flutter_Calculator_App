@@ -1,11 +1,12 @@
-class User {
-  int? id;
-  String? name;
-  int age;
+import 'user_model.dart';
 
-  User({required this.id, required this.name, required this.age});
-
-  User copyWith({int? age}) {
-    return User(id: id, name: name, age: age ?? this.age);
+class UserService {
+  User increaseAge(User user) {
+    return user.copyWith(age: user.age + 1);
   }
+
+  User changeName(User user, String name) {
+    return user.copyWith(name: name);
+  }
+
 }

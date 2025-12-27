@@ -10,9 +10,6 @@ import '../../counter/presentation/counter_provider.dart';
 import '../../user/data/user_service.dart';
 import '../../user/presentation/user_provider.dart';
 
-final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
-  return UserNotifier();
-});
 
 class HomeScreen extends StatefulHookConsumerWidget {
   const HomeScreen({super.key});
@@ -105,8 +102,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
             _button(_numberNotifier.value.toString(), Colors.teal, () {}),
             //Text(ref.read(userProvider.notifier).getName.toString(),style: TextStyle(color: Colors.red),),
-            _button(ref.watch(userProvider.notifier).getName.toString(), Colors.indigo, () {}),
-            _mintuButton(ref.watch(userProvider.notifier).getName.toString(), Colors.indigo)
+           // _button(ref.watch(userProvider.notifier).getName.toString(), Colors.indigo, () {}),
+           // Column(children: [Container(child: Text(ref.watch(userProvider.notifier)),)],)
           ],
         ),
       ),

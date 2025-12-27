@@ -1,0 +1,3 @@
+flutter riverpod state with class service not working, give me a small simple example
+https://chatgpt.com/share/69500480-ff48-8004-baf2-f0334f599f53
+

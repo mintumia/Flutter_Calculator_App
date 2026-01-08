@@ -1,14 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:calculator_app/user/data/user_model.dart';
+import 'package:calculator_app/user/presentation/user_notifier.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import '../data/user_service.dart';
-import '../data/user_model.dart';
-import 'user_notifier.dart';
 
-final userServiceProvider = Provider<UserService>((ref) {
-  return UserService();
-});
 
-final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
-  final service = ref.read(userServiceProvider);
-  return UserNotifier(service);
+final userProvider = StateNotifierProvider <UserNotifier,int>((_){
+
+  return UserNotifier(User(id: "1",name: "Sonia",age: 35));
+
 });

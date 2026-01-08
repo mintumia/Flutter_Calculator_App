@@ -1,14 +1,12 @@
 import 'dart:async';
 
+import 'package:calculator_app/counter/presentation/counter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../counter/presentation/counter_provider.dart';
-import '../../user/data/user_service.dart';
 import '../../user/presentation/user_provider.dart';
+
 
 
 class HomeScreen extends StatefulHookConsumerWidget {
@@ -18,34 +16,37 @@ class HomeScreen extends StatefulHookConsumerWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
+
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   late final TextEditingController _controller;
+
+
+
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
     final counter = ref.watch(counterProvider);
-    final counterController = ref.read(counterProvider.notifier);
+    final counterController = ref.watch(counterProvider.notifier);
+    final user = ref.watch(userProvider);
+    final userController = ref.watch(userProvider.notifier);
     final _numberNotifier = useState(0);
     final mText = useTextEditingController();
 
 
     // rebuilds ONLY when name changes
     //final userName = ref.watch(userProvider.select((user) => user.name));
-    final userName = ref.watch(userProvider.select((u) => u.name));
+   // final userName = ref.watch(userProvider.select((u) => u.name));
 
-    useEffect(() {
+    /*useEffect(() {
       if(_numberNotifier.value <10){
         final _timer = Timer.periodic(Duration(seconds: 1), (time) {
           _numberNotifier.value ++;
@@ -54,18 +55,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         });
       }
       return null;
-    }, [_numberNotifier.value]);
+    }, [_numberNotifier.value]);*/
 
-    useEffect((){
-
-      ref.watch(userProvider.notifier).changeName(mText.text);
-
-      return null;
-
-    },[mText.text]);
-
-
-    final userController = ref.watch(userProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -75,16 +66,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _box(counter.toString(), Colors.purple),
+            //Container(color:Colors.blue, child: Text("fsdf $counter",),),
+            _box(user.age.toString(), Colors.yellow),
 
-            _box("First Container", Colors.yellow),
-            _box("Second Container", Colors.blue),
 
-            _button("Increment", Colors.green, counterController.increment),
 
-            _button("Reset Counter", Colors.indigo, counterController.reset),
+            Container(color: Colors.blue, child: ElevatedButton(onPressed: (){counterController.increment();}, child: Text("data")),),
+            //_button("Decrement", Colors.green,counterController.decrement),
 
-            _button("Increase Age", Colors.indigo, userController.increaseAge),
+            //_button("Reset Counter", Colors.indigo, counterController.reset),
 
             Padding(
               padding: const EdgeInsets.all(20),
@@ -95,15 +85,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   labelText: "Enter name",
                 ),
                 onChanged: (value) {
-                  ref.watch(userProvider.notifier).changeName(value);
+                  //ref.watch(userProvider.notifier).changeName(value);
                 },
               ),
             ),
 
-            _button(_numberNotifier.value.toString(), Colors.teal, () {}),
-            //Text(ref.read(userProvider.notifier).getName.toString(),style: TextStyle(color: Colors.red),),
-           // _button(ref.watch(userProvider.notifier).getName.toString(), Colors.indigo, () {}),
-           // Column(children: [Container(child: Text(ref.watch(userProvider.notifier)),)],)
           ],
         ),
       ),
@@ -132,6 +118,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       padding: EdgeInsets.all(10),
       child: Text(info),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
   }
 }
 

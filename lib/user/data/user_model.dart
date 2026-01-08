@@ -2,11 +2,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class User {
 
 
-  String? id;
+  int id;
   String name;
   int age;
 
-  User({this.id, this.name = "", this.age =0});
+  User({this.id = 0, this.name = "", this.age =0});
 
   User getName() {
     return copyWith();
@@ -25,7 +25,7 @@ class User {
     return copyWith(age:this.age++);
   }
 
-  User copyWith({String? id, String? name, int? age}) {
+  User copyWith({int? id, String? name, int? age}) {
     return User(
       id: id ?? this.id,
       name: name ?? this.name,

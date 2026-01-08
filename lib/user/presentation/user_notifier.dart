@@ -1,27 +1,33 @@
-
 import 'package:flutter_riverpod/legacy.dart';
 
 import '../data/user_model.dart';
 
-class UserNotifier extends StateNotifier<User>{
+class UserNotifier extends StateNotifier<List<User>> {
   UserNotifier(super.state);
-
 
   /*void increment() => state ++;
   void decrement() => state--;
   void reset() => state = 0;*/
 
-  User getName() =>state.copyWith(name: "Mintu Mia");
-
-  User setName(_name){
-    return state.setName(_name);
-
+  void add(String _name) {
+    final newUser = User(
+      id: state.isEmpty ? 0 : state.last.id + 1,
+      name: _name,
+      age: state.last.age,
+    );
+    state = [...state, newUser];
   }
-  User getAge(){
-    return state.getAge();
+
+  void updateName(int id, String _name) {
+    final updateUser = User(
+      id: state.isEmpty ? id : state.last.id = id,
+      name: _name,
+      age:state.last.age,
+    );
+    state = [...state, updateUser];
   }
 
-  User incrementAge(){
-    return state.incrementAge();
-  }
+
+
+
 }

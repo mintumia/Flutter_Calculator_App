@@ -67,7 +67,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Column(
           children: [
             //Container(color:Colors.blue, child: Text("fsdf $counter",),),
-            _box(user.age.toString(), Colors.yellow),
+            _box(user.last.name, Colors.yellow),
+            _box(user.last.id.toString(), Colors.red),
 
 
 
@@ -85,7 +86,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   labelText: "Enter name",
                 ),
                 onChanged: (value) {
-                  //ref.watch(userProvider.notifier).changeName(value);
+                  userController.updateName(user.last.id,value);
                 },
               ),
             ),
